@@ -9,17 +9,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
  * @author zhan
  */
 public class ConfigManager {
-    private String propFile = "E:/tmp/props.properties";
+    private String NAME = "props.properties";
     
     private Properties props;
     
     public ConfigManager() {
+        String workingDir = System.getProperty("user.dir");
+        String propFile = FilenameUtils.concat(workingDir, NAME);
         props = new Properties();
         InputStream in = null;
         try {

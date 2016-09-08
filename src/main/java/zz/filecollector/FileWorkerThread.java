@@ -20,13 +20,13 @@ public class FileWorkerThread extends Thread {
     
     private File srcDir;
     private File destDir;
-    private final PhotoCollector photoCollector;
+    private final FileCollector photoCollector;
     private boolean keepDoing = true;
     private boolean isCopy = false;
     private int filesToCopy;
     private int filesCopied;
     
-    public FileWorkerThread(File srcDir, File destDir, PhotoCollector photoCollector) {
+    public FileWorkerThread(File srcDir, File destDir, FileCollector photoCollector) {
         this.srcDir = srcDir;
         this.destDir = destDir;
         this.photoCollector = photoCollector;
