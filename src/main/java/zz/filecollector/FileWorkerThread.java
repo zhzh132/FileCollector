@@ -16,19 +16,24 @@ import zz.filecollector.fileprocessor.FileProcessorRegister;
  * @author zhan
  */
 public class FileWorkerThread extends Thread {
+    public static final int ACTION_MOVE = 1;
+    public static final int ACTION_COPY = 2;
+    public static final int ACTION_PREVIEW = 3;
+    
     private static final String[] exts = {"jpg", "jpeg", "JPG", "JPEG", "mp4", "MP4"};
     
     private File srcDir;
     private File destDir;
     private final FileCollector photoCollector;
     private boolean keepDoing = true;
-    private boolean isCopy = false;
     private int filesToCopy;
     private int filesCopied;
+    private int filesMoved;
+    private int actionType;
     
-    public FileWorkerThread(File srcDir, File destDir, FileCollector photoCollector) {
-        this.srcDir = srcDir;
-        this.destDir = destDir;
+    public FileWorkerThread(FileCollector photoCollector) {
+        this.srcDir = photoCollector.getSrcDir();
+        this.destDir = photoCollector.getDestDir();
         this.photoCollector = photoCollector;
     }
     
@@ -39,18 +44,18 @@ public class FileWorkerThread extends Thread {
         Collection<File> srcFiles = FileUtils.listFiles(srcDir, exts, true);
         for(File file : srcFiles) {
             if(keepDoing) {
-                processFile(file, this.isCopy);
+                processFile(file);
             }
             else {
                 this.infoln("终止!");
                 break;
             }
         }
-        this.infoln(String.format("处理完毕. %d 个文件需要复制. %d 个文件已经复制.", this.filesToCopy, this.filesCopied));
+        this.infoln(String.format("%d 个文件需要处理. 复制了 %d 个文件. 移动了 %d 个文件", this.filesToCopy, this.filesCopied, this.filesMoved));
         this.photoCollector.enableButtons();
     }
     
-    private void processFile(File file, boolean isCopy) {
+    private void processFile(File file) {
         FileInfo fileInfo = FileProcessorRegister.extractFileInfo(file);
         if(fileInfo != null) {
             this.info(file.getAbsolutePath());
@@ -70,17 +75,29 @@ public class FileWorkerThread extends Thread {
                     newFile = new File(newName);
                 }
             }
-            this.infoln(" 复制到 " + newFile.getAbsolutePath());
+            this.infoln(" --> " + newFile.getAbsolutePath());
             this.filesToCopy++;
 
-            if(isCopy) {
-                try {
-                    FileUtils.copyFile(file, newFile, true);
-                    this.filesCopied++;
-                    this.infoln("完成.");
-                } catch (Exception ex) {
-                    this.error(ex.getMessage());
-                }
+            switch (actionType) {
+                case ACTION_COPY:
+                    try {
+                        FileUtils.copyFile(file, newFile, true);
+                        this.filesCopied++;
+                        this.infoln("完成.");
+                    } catch (Exception ex) {
+                        this.error(ex.getMessage());
+                    }   break;
+                case ACTION_MOVE:
+                    try {
+                        FileUtils.moveFile(file, newFile);
+                        this.filesMoved++;
+                        this.infoln("完成.");
+                    } catch (Exception ex) {
+                        this.error(ex.getMessage());
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         else {
@@ -111,9 +128,9 @@ public class FileWorkerThread extends Thread {
     public void stopWorking() {
         this.keepDoing = false;
     }
-    
-    public void setCopy(boolean isCopy) {
-        this.isCopy = isCopy;
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
     }
     
     private void info(String msg) {

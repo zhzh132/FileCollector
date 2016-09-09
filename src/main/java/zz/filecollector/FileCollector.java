@@ -52,10 +52,11 @@ public class FileCollector extends javax.swing.JFrame {
         srcDirField = new javax.swing.JTextField();
         selectSrcButton = new javax.swing.JButton();
         scanButton = new javax.swing.JButton();
-        copyButton = new javax.swing.JButton();
+        startButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         infoArea = new javax.swing.JTextArea();
         stopButton = new javax.swing.JButton();
+        actionBox = new javax.swing.JComboBox<>();
 
         archiveDirChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
@@ -90,10 +91,10 @@ public class FileCollector extends javax.swing.JFrame {
             }
         });
 
-        copyButton.setText("开始复制");
-        copyButton.addActionListener(new java.awt.event.ActionListener() {
+        startButton.setText("开始");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyButtonActionPerformed(evt);
+                startButtonActionPerformed(evt);
             }
         });
 
@@ -110,6 +111,8 @@ public class FileCollector extends javax.swing.JFrame {
             }
         });
 
+        actionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "移动", "复制" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,25 +120,28 @@ public class FileCollector extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(scanButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(copyButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(stopButton))
                     .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(scanButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(archiveDirField)
-                            .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(selectDestButton)
-                            .addComponent(selectSrcButton))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(actionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(startButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(stopButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(archiveDirField)
+                                    .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(selectDestButton)
+                                    .addComponent(selectSrcButton))))))
                 .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
@@ -155,8 +161,9 @@ public class FileCollector extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(scanButton)
-                    .addComponent(copyButton)
-                    .addComponent(stopButton))
+                    .addComponent(startButton)
+                    .addComponent(stopButton)
+                    .addComponent(actionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
@@ -184,7 +191,8 @@ public class FileCollector extends javax.swing.JFrame {
     }//GEN-LAST:event_selectSrcButtonActionPerformed
 
     private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
-        fileWorker = new FileWorkerThread(this.srcDir, this.destDir, this);
+        fileWorker = new FileWorkerThread(this);
+        fileWorker.setActionType(FileWorkerThread.ACTION_PREVIEW);
         fileWorker.start();
     }//GEN-LAST:event_scanButtonActionPerformed
 
@@ -194,11 +202,11 @@ public class FileCollector extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_stopButtonActionPerformed
 
-    private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-        fileWorker = new FileWorkerThread(this.srcDir, this.destDir, this);
-        fileWorker.setCopy(true);
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+        fileWorker = new FileWorkerThread(this);
+        fileWorker.setActionType(this.getActionType());
         fileWorker.start();
-    }//GEN-LAST:event_copyButtonActionPerformed
+    }//GEN-LAST:event_startButtonActionPerformed
 
     private void setSrcDir(File srcDir) {
         this.srcDir = srcDir;
@@ -214,21 +222,43 @@ public class FileCollector extends javax.swing.JFrame {
     
     public void disableButtons() {
         this.scanButton.setEnabled(false);
-        this.copyButton.setEnabled(false);
+        this.startButton.setEnabled(false);
         this.selectDestButton.setEnabled(false);
         this.selectSrcButton.setEnabled(false);
+        this.actionBox.setEnabled(false);
     }
     
     public void enableButtons() {
         this.scanButton.setEnabled(true);
-        this.copyButton.setEnabled(true);
+        this.startButton.setEnabled(true);
         this.selectDestButton.setEnabled(true);
         this.selectSrcButton.setEnabled(true);
+        this.actionBox.setEnabled(true);
     }
     
     public void displayInfo(String info) {
         infoArea.append(info);
         infoArea.setCaretPosition(infoArea.getDocument().getLength());
+    }
+    
+    public int getActionType() {
+        int selected = this.actionBox.getSelectedIndex();
+        switch (selected) {
+            case 0:
+                return FileWorkerThread.ACTION_MOVE;
+            case 1:
+                return FileWorkerThread.ACTION_COPY;
+            default:
+                return FileWorkerThread.ACTION_PREVIEW;
+        }
+    }
+
+    public File getDestDir() {
+        return destDir;
+    }
+
+    public File getSrcDir() {
+        return srcDir;
     }
     
     private File destDir;
@@ -280,9 +310,9 @@ public class FileCollector extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> actionBox;
     private javax.swing.JFileChooser archiveDirChooser;
     private javax.swing.JTextField archiveDirField;
-    private javax.swing.JButton copyButton;
     private javax.swing.JTextArea infoArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -291,6 +321,7 @@ public class FileCollector extends javax.swing.JFrame {
     private javax.swing.JButton selectDestButton;
     private javax.swing.JButton selectSrcButton;
     private javax.swing.JTextField srcDirField;
+    private javax.swing.JButton startButton;
     private javax.swing.JButton stopButton;
     // End of variables declaration//GEN-END:variables
 
