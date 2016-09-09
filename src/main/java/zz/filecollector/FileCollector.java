@@ -16,8 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author zhan
  */
 public class FileCollector extends javax.swing.JFrame {
-    private static final String SOURCE_KEY = "sourceDir";
-    private static final String DEST_KEY = "destinationDir";
+    
     private static final ConfigManager config = new ConfigManager();
 
     /**
@@ -25,11 +24,11 @@ public class FileCollector extends javax.swing.JFrame {
      */
     public FileCollector() {
         initComponents();
-        String src = config.get(SOURCE_KEY);
+        String src = config.getSourceDir();
         if(StringUtils.isNotEmpty(src)) {
             this.setSrcDir(new File(src));
         }
-        String dest = config.get(DEST_KEY);
+        String dest = config.getDestDir();
         if(StringUtils.isNotEmpty(dest)) {
             this.setDestDir(new File(dest));
         }
@@ -211,13 +210,13 @@ public class FileCollector extends javax.swing.JFrame {
     private void setSrcDir(File srcDir) {
         this.srcDir = srcDir;
         srcDirField.setText(srcDir.getAbsolutePath());
-        config.set(SOURCE_KEY, srcDir.getAbsolutePath());
+        config.setSourceDir(srcDir.getAbsolutePath());
     }
     
     private void setDestDir(File destDir) {
         this.destDir = destDir;
         archiveDirField.setText(destDir.getAbsolutePath());
-        config.set(DEST_KEY, destDir.getAbsolutePath());
+        config.setDestDir(destDir.getAbsolutePath());
     }
     
     public void disableButtons() {

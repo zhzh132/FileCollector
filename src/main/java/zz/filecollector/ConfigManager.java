@@ -20,14 +20,16 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class ConfigManager {
     private static final String NAME = "props.properties";
-    private String workingDir;
+    private static final String SOURCE_KEY = "sourceDir";
+    private static final String DEST_KEY = "destinationDir";
+    
     private File propFile;
     
     private Properties props;
     
     public ConfigManager() {
         try {
-            this.workingDir = System.getProperty("user.dir");
+            String workingDir = System.getProperty("user.dir");
             
             propFile = new File(FilenameUtils.concat(workingDir, NAME));
             props = new Properties();
@@ -79,5 +81,21 @@ public class ConfigManager {
     
     public void set(String key, String value) {
         this.props.setProperty(key, value);
+    }
+    
+    public String getSourceDir() {
+        return props.getProperty(SOURCE_KEY);
+    }
+    
+    public void setSourceDir(String dir) {
+        props.setProperty(SOURCE_KEY, dir);
+    }
+    
+    public String getDestDir() {
+        return props.getProperty(DEST_KEY);
+    }
+    
+    public void setDestDir(String dir) {
+        props.setProperty(DEST_KEY, dir);
     }
 }
