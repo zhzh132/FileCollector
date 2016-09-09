@@ -227,7 +227,7 @@ public class FileCollector extends javax.swing.JFrame {
     }
     
     public void displayInfo(String info) {
-        infoArea.append(info + "\n");
+        infoArea.append(info);
         infoArea.setCaretPosition(infoArea.getDocument().getLength());
     }
     

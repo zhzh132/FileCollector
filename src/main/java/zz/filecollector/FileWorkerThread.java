@@ -34,7 +34,7 @@ public class FileWorkerThread extends Thread {
     
     @Override
     public void run() {
-        this.info("开始处理" + srcDir.getAbsolutePath());
+        this.infoln("从" + srcDir.getAbsolutePath() + " 归档到 " + destDir.getAbsolutePath());
         this.photoCollector.disableButtons();
         Collection<File> srcFiles = FileUtils.listFiles(srcDir, exts, true);
         for(File file : srcFiles) {
@@ -42,11 +42,11 @@ public class FileWorkerThread extends Thread {
                 processFile(file, this.isCopy);
             }
             else {
-                this.info("Aborted!");
+                this.infoln("终止!");
                 break;
             }
         }
-        this.info(String.format("处理完毕. %d files to copy. %d files copied.", this.filesToCopy, this.filesCopied));
+        this.infoln(String.format("处理完毕. %d 个文件需要复制. %d 个文件已经复制.", this.filesToCopy, this.filesCopied));
         this.photoCollector.enableButtons();
     }
     
@@ -61,7 +61,7 @@ public class FileWorkerThread extends Thread {
             while(newFile.exists()) {
                 FileInfo newInfo = FileProcessorRegister.extractFileInfo(newFile);
                 if(newInfo.isSameFile(fileInfo)) {
-                    this.info("Skip.");
+                    this.infoln("... 忽略.");
                     return;
                 }
                 else {
@@ -70,21 +70,21 @@ public class FileWorkerThread extends Thread {
                     newFile = new File(newName);
                 }
             }
-            this.info("Copy " + file.getAbsolutePath() + " to " + newFile.getAbsolutePath());
+            this.infoln(" 复制到 " + newFile.getAbsolutePath());
             this.filesToCopy++;
 
             if(isCopy) {
                 try {
                     FileUtils.copyFile(file, newFile, true);
                     this.filesCopied++;
-                    this.info("Done.");
+                    this.infoln("完成.");
                 } catch (Exception ex) {
                     this.error(ex.getMessage());
                 }
             }
         }
         else {
-            this.error("Unknown file - " + file.getAbsolutePath());
+            this.error("无法处理的文件 - " + file.getAbsolutePath());
         }
     }
     
@@ -120,7 +120,12 @@ public class FileWorkerThread extends Thread {
         this.photoCollector.displayInfo(msg);
     }
     
+    private void infoln(String msg) {
+        this.photoCollector.displayInfo(msg + "\n");
+    }
+    
     private void error(String msg) {
         this.photoCollector.displayInfo("ERROR: " + msg);
+        this.photoCollector.displayInfo("\n");
     }
 }
