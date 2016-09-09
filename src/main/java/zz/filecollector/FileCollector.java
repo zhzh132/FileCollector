@@ -5,6 +5,8 @@
  */
 package zz.filecollector;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import org.apache.commons.lang3.StringUtils;
@@ -14,18 +16,20 @@ import org.apache.commons.lang3.StringUtils;
  * @author zhan
  */
 public class FileCollector extends javax.swing.JFrame {
+    private static final String SOURCE_KEY = "sourceDir";
+    private static final String DEST_KEY = "destinationDir";
+    private static final ConfigManager config = new ConfigManager();
 
     /**
      * Creates new form PhotoCollector
      */
     public FileCollector() {
         initComponents();
-        this.config = new ConfigManager();
-        String src = config.get("sourceDir");
+        String src = config.get(SOURCE_KEY);
         if(StringUtils.isNotEmpty(src)) {
             this.setSrcDir(new File(src));
         }
-        String dest = config.get("destinationDir");
+        String dest = config.get(DEST_KEY);
         if(StringUtils.isNotEmpty(dest)) {
             this.setDestDir(new File(dest));
         }
@@ -199,11 +203,13 @@ public class FileCollector extends javax.swing.JFrame {
     private void setSrcDir(File srcDir) {
         this.srcDir = srcDir;
         srcDirField.setText(srcDir.getAbsolutePath());
+        config.set(SOURCE_KEY, srcDir.getAbsolutePath());
     }
     
     private void setDestDir(File destDir) {
         this.destDir = destDir;
         archiveDirField.setText(destDir.getAbsolutePath());
+        config.set(DEST_KEY, destDir.getAbsolutePath());
     }
     
     public void disableButtons() {
@@ -228,7 +234,6 @@ public class FileCollector extends javax.swing.JFrame {
     private File destDir;
     private File srcDir;
     private FileWorkerThread fileWorker;
-    private ConfigManager config;
     
     /**
      * @param args the command line arguments
@@ -260,8 +265,16 @@ public class FileCollector extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new FileCollector().setVisible(true);
+                FileCollector frame = new FileCollector();
+                frame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent event) {
+                        config.saveProperties();
+                    }
+                });
+                frame.setVisible(true);
             }
         });
     }
@@ -280,4 +293,5 @@ public class FileCollector extends javax.swing.JFrame {
     private javax.swing.JTextField srcDirField;
     private javax.swing.JButton stopButton;
     // End of variables declaration//GEN-END:variables
+
 }
