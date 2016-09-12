@@ -61,7 +61,7 @@ public class FileCollector extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("照片归档目录：");
+        jLabel1.setText("归档目录：");
 
         selectDestButton.setText("选择...");
         selectDestButton.addActionListener(new java.awt.event.ActionListener() {
@@ -72,7 +72,7 @@ public class FileCollector extends javax.swing.JFrame {
 
         archiveDirField.setEditable(false);
 
-        jLabel2.setText("手机目录：");
+        jLabel2.setText("照片和视频所在目录：");
 
         srcDirField.setEditable(false);
 
@@ -110,7 +110,7 @@ public class FileCollector extends javax.swing.JFrame {
             }
         });
 
-        actionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "移动", "复制" }));
+        actionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "移动到归档目录", "复制到归档目录" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,9 +122,9 @@ public class FileCollector extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                            .addComponent(scanButton)
                             .addComponent(jLabel2)
-                            .addComponent(scanButton))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -136,7 +136,7 @@ public class FileCollector extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(archiveDirField)
-                                    .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
+                                    .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(selectDestButton)
@@ -146,12 +146,6 @@ public class FileCollector extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectDestButton)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(archiveDirField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -159,12 +153,17 @@ public class FileCollector extends javax.swing.JFrame {
                     .addComponent(selectSrcButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(archiveDirField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectDestButton))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(scanButton)
                     .addComponent(startButton)
                     .addComponent(stopButton)
                     .addComponent(actionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

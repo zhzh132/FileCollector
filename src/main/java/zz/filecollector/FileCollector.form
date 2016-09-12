@@ -30,15 +30,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="scanButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -52,7 +52,7 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="archiveDirField" max="32767" attributes="0"/>
-                                  <Component id="srcDirField" pref="434" max="32767" attributes="0"/>
+                                  <Component id="srcDirField" pref="398" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -70,19 +70,17 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="selectDestButton" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="archiveDirField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="srcDirField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="selectSrcButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="archiveDirField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="selectDestButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -92,7 +90,7 @@
                   <Component id="actionBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="300" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="299" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -101,7 +99,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x7167;&#x7247;&#x5f52;&#x6863;&#x76ee;&#x5f55;&#xff1a;"/>
+        <Property name="text" type="java.lang.String" value="&#x5f52;&#x6863;&#x76ee;&#x5f55;&#xff1a;"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="selectDestButton">
@@ -119,7 +117,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x624b;&#x673a;&#x76ee;&#x5f55;&#xff1a;"/>
+        <Property name="text" type="java.lang.String" value="&#x7167;&#x7247;&#x548c;&#x89c6;&#x9891;&#x6240;&#x5728;&#x76ee;&#x5f55;&#xff1a;"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="srcDirField">
@@ -182,8 +180,8 @@
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="2">
-            <StringItem index="0" value="&#x79fb;&#x52a8;"/>
-            <StringItem index="1" value="&#x590d;&#x5236;"/>
+            <StringItem index="0" value="&#x79fb;&#x52a8;&#x5230;&#x5f52;&#x6863;&#x76ee;&#x5f55;"/>
+            <StringItem index="1" value="&#x590d;&#x5236;&#x5230;&#x5f52;&#x6863;&#x76ee;&#x5f55;"/>
           </StringArray>
         </Property>
       </Properties>
