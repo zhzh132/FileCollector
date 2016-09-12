@@ -16,9 +16,10 @@ import zz.filecollector.fileprocessor.FileProcessorRegister;
  * @author zhan
  */
 public class FileWorkerThread extends Thread {
+    public static final int ACTION_PREVIEW = 0;
     public static final int ACTION_MOVE = 1;
     public static final int ACTION_COPY = 2;
-    public static final int ACTION_PREVIEW = 3;
+    public static final int ACTION_MOVEDEL = 3;
     
     private static final String[] exts = {"jpg", "jpeg", "JPG", "JPEG", "mp4", "MP4"};
     
@@ -26,9 +27,10 @@ public class FileWorkerThread extends Thread {
     private File destDir;
     private final FileCollector photoCollector;
     private boolean keepDoing = true;
-    private int filesToCopy;
     private int filesCopied;
     private int filesMoved;
+    private int filesDeleted;
+    private int filesTotal;
     private int actionType;
     
     public FileWorkerThread(FileCollector photoCollector) {
@@ -51,13 +53,15 @@ public class FileWorkerThread extends Thread {
                 break;
             }
         }
-        this.infoln(String.format("%d 个文件需要处理. 复制了 %d 个文件. 移动了 %d 个文件", this.filesToCopy, this.filesCopied, this.filesMoved));
+        this.infoln(String.format("共找到了 %d 个文件. 复制了 %d 个文件. 移动了 %d 个文件. 删除了 %d 个文件", 
+                this.filesTotal, this.filesCopied, this.filesMoved, this.filesDeleted));
         this.photoCollector.enableButtons();
     }
     
     private void processFile(File file) {
         FileInfo fileInfo = FileProcessorRegister.extractFileInfo(file);
         if(fileInfo.getFileType() != FileInfo.UNKNOWN) {
+            this.filesTotal++;
             this.info(file.getAbsolutePath());
             
             fileInfo.setDupIndex(0);
@@ -66,7 +70,7 @@ public class FileWorkerThread extends Thread {
             while(newFile.exists()) {
                 FileInfo newInfo = FileProcessorRegister.extractFileInfo(newFile);
                 if(newInfo.isSameFile(fileInfo)) {
-                    this.infoln("... 忽略.");
+                    handleDuplicatedFile(file);
                     return;
                 }
                 else {
@@ -75,33 +79,54 @@ public class FileWorkerThread extends Thread {
                     newFile = new File(newName);
                 }
             }
-            this.infoln(" --> " + newFile.getAbsolutePath());
-            this.filesToCopy++;
-
-            switch (actionType) {
-                case ACTION_COPY:
-                    try {
-                        FileUtils.copyFile(file, newFile, true);
-                        this.filesCopied++;
-                        this.infoln("完成.");
-                    } catch (Exception ex) {
-                        this.error(ex.getMessage());
-                    }   break;
-                case ACTION_MOVE:
-                    try {
-                        FileUtils.moveFile(file, newFile);
-                        this.filesMoved++;
-                        this.infoln("完成.");
-                    } catch (Exception ex) {
-                        this.error(ex.getMessage());
-                    }
-                    break;
-                default:
-                    break;
-            }
+            handleNewFile(file, newFile);
         }
         else {
             this.error("无法处理的文件 - " + file.getAbsolutePath());
+        }
+    }
+    
+    private void handleDuplicatedFile(File file) {
+        this.infoln("... 重复的文件.");
+        if(actionType == ACTION_MOVEDEL) {
+            try {
+                if(file.delete()) {
+                    this.filesDeleted++;
+                    this.infoln("已删除.");
+                }
+                else {
+                    this.infoln("删除失败.");
+                }
+            } catch (Exception e) {
+                this.error(e.getMessage());
+            }
+        }
+    }
+    
+    private void handleNewFile(File file, File newFile) {
+        this.infoln(" --> " + newFile.getAbsolutePath());
+
+        switch (actionType) {
+            case ACTION_COPY:
+                try {
+                    FileUtils.copyFile(file, newFile, true);
+                    this.filesCopied++;
+                    this.infoln("完成.");
+                } catch (Exception ex) {
+                    this.error(ex.getMessage());
+                }   break;
+            case ACTION_MOVE:
+            case ACTION_MOVEDEL:
+                try {
+                    FileUtils.moveFile(file, newFile);
+                    this.filesMoved++;
+                    this.infoln("完成.");
+                } catch (Exception ex) {
+                    this.error(ex.getMessage());
+                }
+                break;
+            default:
+                break;
         }
     }
     

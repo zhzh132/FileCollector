@@ -110,7 +110,7 @@ public class FileCollector extends javax.swing.JFrame {
             }
         });
 
-        actionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "移动到归档目录", "复制到归档目录" }));
+        actionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "移动到归档目录", "复制到归档目录", "移动到归档目录，同时删除重复文件" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,9 +122,10 @@ public class FileCollector extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scanButton)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(scanButton, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -136,7 +137,7 @@ public class FileCollector extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(archiveDirField)
-                                    .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
+                                    .addComponent(srcDirField, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(selectDestButton)
@@ -157,11 +158,13 @@ public class FileCollector extends javax.swing.JFrame {
                     .addComponent(archiveDirField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectDestButton))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(scanButton)
-                    .addComponent(startButton)
-                    .addComponent(stopButton)
-                    .addComponent(actionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(startButton)
+                        .addComponent(stopButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(actionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(scanButton)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                 .addContainerGap())
@@ -246,6 +249,8 @@ public class FileCollector extends javax.swing.JFrame {
                 return FileWorkerThread.ACTION_MOVE;
             case 1:
                 return FileWorkerThread.ACTION_COPY;
+            case 2:
+                return FileWorkerThread.ACTION_MOVEDEL;
             default:
                 return FileWorkerThread.ACTION_PREVIEW;
         }
