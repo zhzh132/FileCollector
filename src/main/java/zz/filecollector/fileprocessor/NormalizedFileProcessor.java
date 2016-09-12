@@ -6,6 +6,10 @@
 package zz.filecollector.fileprocessor;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
@@ -17,6 +21,7 @@ import zz.filecollector.FileInfo;
 public class NormalizedFileProcessor implements FileProcessor {
 
     public static final String NAME = "Archived";
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
     
     @Override
     public FileInfo extractFileInfo(File file) {
@@ -24,17 +29,12 @@ public class NormalizedFileProcessor implements FileProcessor {
         info.setDevice(NAME);
         String name = file.getName();
         
-        int year = Integer.parseInt(name.substring(0,4));
-        info.setYear(year);
-        
-        int month = Integer.parseInt(name.substring(4,6));
-        info.setMonth(month);
-        
-        int date = Integer.parseInt(name.substring(6,8));
-        info.setDate(date);
-        
-        String timeStr = name.substring(9,15);
-        info.setTimeStr(timeStr);
+        try {
+            Date date = dateFormat.parse(name.substring(0, 15));
+            info.setCreateDate(date);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
         
         info.setSize(FileUtils.sizeOf(file));
         String extension = FilenameUtils.getExtension(name).toLowerCase();

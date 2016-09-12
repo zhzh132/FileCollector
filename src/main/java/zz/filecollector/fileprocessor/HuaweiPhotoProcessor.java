@@ -6,6 +6,10 @@
 package zz.filecollector.fileprocessor;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
@@ -17,6 +21,7 @@ import zz.filecollector.FileInfo;
 public class HuaweiPhotoProcessor implements FileProcessor {
 
     public static final String NAME = "HUAWEI_P6";
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
     
     @Override
     public FileInfo extractFileInfo(File file) {
@@ -25,17 +30,12 @@ public class HuaweiPhotoProcessor implements FileProcessor {
         info.setFileType(FileInfo.PHOTO);
         String name = file.getName();
         
-        int year = Integer.parseInt(name.substring(4,8));
-        info.setYear(year);
-        
-        int month = Integer.parseInt(name.substring(8,10));
-        info.setMonth(month);
-        
-        int date = Integer.parseInt(name.substring(10,12));
-        info.setDate(date);
-        
-        String timeStr = name.substring(13,19);
-        info.setTimeStr(timeStr);
+        try {
+            Date date = dateFormat.parse(name.substring(4, 19));
+            info.setCreateDate(date);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
         
         info.setSize(FileUtils.sizeOf(file));
         String extension = FilenameUtils.getExtension(name).toLowerCase();

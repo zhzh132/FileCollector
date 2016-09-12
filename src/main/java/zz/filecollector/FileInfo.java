@@ -5,6 +5,11 @@
  */
 package zz.filecollector;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,39 +21,24 @@ public class FileInfo {
     public static final int PHOTO = 1;
     public static final int VIDEO = 2;
     
-    private int year;
-    private int month;
-    private int date;
-    private String timeStr;
     private long size;
     private String extension;
     private int dupIndex;
     private int fileType;
-    
+    private Date createDate;
+    private Calendar calendar;
     private String device;
 
     public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+        return this.calendar.get(Calendar.YEAR);
     }
 
     public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
+        return this.calendar.get(Calendar.MONTH) + 1;
     }
 
     public int getDate() {
-        return date;
-    }
-
-    public void setDate(int date) {
-        this.date = date;
+        return this.calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     public long getSize() {
@@ -65,14 +55,6 @@ public class FileInfo {
 
     public void setDevice(String device) {
         this.device = device;
-    }
-
-    public String getTimeStr() {
-        return timeStr;
-    }
-
-    public void setTimeStr(String timeStr) {
-        this.timeStr = timeStr;
     }
 
     public String getExtension() {
@@ -98,21 +80,31 @@ public class FileInfo {
     public void setFileType(int fileType) {
         this.fileType = fileType;
     }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+        this.calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"), Locale.CHINA);
+        this.calendar.setTime(createDate);
+    }
     
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
+    
     /**
-     *  yyyyMMdd-hhmmss (1).jpg
+     *  yyyyMMdd-HHmmss (1).jpg
      * @return 
      */
     public String getNormalizedName() {
         StringBuilder name = new StringBuilder();
-        String baseName = String.format("%d%02d%02d-%s", this.getYear(), this.getMonth(), this.getDate(), 
-                this.getTimeStr());
-        name.append(baseName);
+        name.append(dateFormat.format(createDate));
         if(this.getDupIndex() > 0) {
             name.append(" (").append(this.getDupIndex()).append(")");
         }
@@ -122,9 +114,6 @@ public class FileInfo {
     
     public boolean isSameFile(FileInfo info) {
         return this.getSize() == info.getSize() &&
-                this.getTimeStr().equals(info.getTimeStr()) &&
-                this.getDate() == info.getDate() &&
-                this.getMonth() == info.getMonth() &&
-                this.getYear() == info.getYear();
+                this.getCreateDate().equals(info.getCreateDate());
     }
 }
