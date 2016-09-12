@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
 
 /**
@@ -24,34 +22,34 @@ public class NormalizedFileProcessor implements FileProcessor {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
     
     @Override
-    public FileInfo extractFileInfo(File file) {
-        FileInfo info = new FileInfo();
-        info.setDevice(NAME);
-        String name = file.getName();
-        
-        try {
-            Date date = dateFormat.parse(name.substring(0, 15));
-            info.setCreateDate(date);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
+    public void extractFileInfo(File file, FileInfo info) {
+        FileProcessor.getBasicFileInfo(file, info);
+        if(info.getDevice() == null) {
+            info.setDevice(NAME);
+        }
+        if(info.getFileType() == FileInfo.UNKNOWN) {
+            String extension = info.getExtension();
+            switch(extension) {
+                case "jpg":
+                case "jpeg":
+                    info.setFileType(FileInfo.PHOTO);
+                    break;
+                case "mp4":
+                case "avi":
+                    info.setFileType(FileInfo.VIDEO);
+                    break;
+            }
         }
         
-        info.setSize(FileUtils.sizeOf(file));
-        String extension = FilenameUtils.getExtension(name).toLowerCase();
-        info.setExtension(extension);
-        switch(extension) {
-            case "jpg":
-            case "jpeg":
-                info.setFileType(FileInfo.PHOTO);
-                break;
-            case "mp4":
-            case "avi":
-                info.setFileType(FileInfo.VIDEO);
-                break;
+        if(info.getCreateDate() == null) {
+            try {
+                String name = file.getName();
+                Date date = dateFormat.parse(name.substring(0, 15));
+                info.setCreateDate(date);
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
         }
-        
-        info.setDupIndex(FileProcessor.getDupIndex(name));
-        return info;
     }
 
     /**

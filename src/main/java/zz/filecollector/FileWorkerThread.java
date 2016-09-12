@@ -57,7 +57,7 @@ public class FileWorkerThread extends Thread {
     
     private void processFile(File file) {
         FileInfo fileInfo = FileProcessorRegister.extractFileInfo(file);
-        if(fileInfo != null) {
+        if(fileInfo.getFileType() != FileInfo.UNKNOWN) {
             this.info(file.getAbsolutePath());
             
             fileInfo.setDupIndex(0);

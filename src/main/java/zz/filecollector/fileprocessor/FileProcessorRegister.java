@@ -14,29 +14,22 @@ import zz.filecollector.FileInfo;
  */
 public class FileProcessorRegister {
     public static final FileProcessor[] processors = {
-//        new MeizuPhotoProcessor(),
-//        new NormalizedFileProcessor(),
-//        new MeizuVideoProcessor(),
-//        new HuaweiPhotoProcessor(),
-//        new SamsungPhotoProcessor(),
-//        new SamsungVideoProcessor(),
+        new MeizuPhotoProcessor(),
+        new NormalizedFileProcessor(),
+        new MeizuVideoProcessor(),
+        new HuaweiPhotoProcessor(),
+        new SamsungPhotoProcessor(),
+        new SamsungVideoProcessor(),
         new JpgPhotoProcessor()
     };
     
-    public static FileProcessor find(File file) {
+    public static FileInfo extractFileInfo(File file) {
+        FileInfo info = new FileInfo();
         for(FileProcessor fp : processors) {
             if(fp.applies(file)) {
-                return fp;
+                fp.extractFileInfo(file, info);
             }
         }
-        return null;
-    }
-    
-    public static FileInfo extractFileInfo(File file) {
-        FileProcessor fp = find(file);
-        if(fp != null) {
-            return fp.extractFileInfo(file);
-        }
-        return null;
+        return info;
     }
 }

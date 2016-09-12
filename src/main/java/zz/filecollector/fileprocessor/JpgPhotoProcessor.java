@@ -29,40 +29,42 @@ public class JpgPhotoProcessor implements FileProcessor {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.CHINA);
     
     @Override
-    public FileInfo extractFileInfo(File file) {
-        FileInfo info = new FileInfo();
-        info.setFileType(FileInfo.PHOTO);
-        info.setSize(FileUtils.sizeOf(file));
-        String name = file.getName();
-        info.setExtension(FilenameUtils.getExtension(name).toLowerCase());
-        info.setDupIndex(FileProcessor.getDupIndex(name));
+    public void extractFileInfo(File file, FileInfo info) {
+        FileProcessor.getBasicFileInfo(file, info);
+        if(info.getFileType() == FileInfo.UNKNOWN) {
+            info.setFileType(FileInfo.PHOTO);
+        }
         
         try {
             ImageMetadata metadata = Imaging.getMetadata(file);
             if (metadata instanceof JpegImageMetadata) {
                 final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-                TiffField dateTime = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_DATE_TIME);
-                String str = dateTime.getStringValue();  // 2014:02:06 12:11:26
-                if(StringUtils.isNotEmpty(str)) {
+                
+                if(info.getCreateDate() == null) {
                     try {
-                        Date date = dateFormat.parse(str);
-                        info.setCreateDate(date);
-                    } catch(ParseException e) {
+                        TiffField dateTime = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_DATE_TIME);
+                        String str = dateTime.getStringValue();  // 2014:02:06 12:11:26
+                        if(StringUtils.isNotEmpty(str)) {
+                            Date date = dateFormat.parse(str);
+                            info.setCreateDate(date);
+                        }
+                    } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
                 
-                TiffField model = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MODEL);
-                byte[] bytes = model.getByteArrayValue();
-                String modelStr = new String(bytes).trim();
-                if(StringUtils.isNotEmpty(modelStr)) {
-                    info.setDevice(modelStr);
+                if(info.getDevice() == null) {
+                    TiffField model = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MODEL);
+                    byte[] bytes = model.getByteArrayValue();
+                    String modelStr = new String(bytes).trim();
+                    if(StringUtils.isNotEmpty(modelStr)) {
+                        info.setDevice(modelStr);
+                    }
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return info;
     }
     
     @Override

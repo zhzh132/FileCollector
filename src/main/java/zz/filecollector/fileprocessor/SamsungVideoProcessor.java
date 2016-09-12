@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
 
 /**
@@ -24,23 +22,24 @@ public class SamsungVideoProcessor implements FileProcessor {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
 
     @Override
-    public FileInfo extractFileInfo(File file) {
-        FileInfo info = new FileInfo();
-        info.setDevice(NAME);
-        info.setFileType(FileInfo.VIDEO);
-        String name = file.getName();
-        
-        try {
-            Date date = dateFormat.parse(name.substring(6, 25));
-            info.setCreateDate(date);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
+    public void extractFileInfo(File file, FileInfo info) {
+        FileProcessor.getBasicFileInfo(file, info);
+        if(info.getDevice() == null) {
+            info.setDevice(NAME);
+        }
+        if(info.getFileType() == FileInfo.UNKNOWN) {
+            info.setFileType(FileInfo.VIDEO);
         }
         
-        info.setSize(FileUtils.sizeOf(file));
-        info.setExtension(FilenameUtils.getExtension(name).toLowerCase());
-        info.setDupIndex(FileProcessor.getDupIndex(name));
-        return info;
+        if(info.getCreateDate() == null) {
+            try {
+                String name = file.getName();
+                Date date = dateFormat.parse(name.substring(6, 25));
+                info.setCreateDate(date);
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**

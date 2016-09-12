@@ -20,11 +20,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class FileInfo {
     public static final int PHOTO = 1;
     public static final int VIDEO = 2;
+    public static final int UNKNOWN = 0;
     
     private long size;
     private String extension;
     private int dupIndex;
-    private int fileType;
+    private int fileType = UNKNOWN;
     private Date createDate;
     private Calendar calendar;
     private String device;

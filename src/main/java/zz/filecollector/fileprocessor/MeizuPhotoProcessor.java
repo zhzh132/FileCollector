@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
 
 /**
@@ -24,24 +22,25 @@ public class MeizuPhotoProcessor implements FileProcessor {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
     
     @Override
-    public FileInfo extractFileInfo(File file) {
-        FileInfo info = new FileInfo();
-        info.setDevice(NAME);
-        info.setFileType(FileInfo.PHOTO);
-        String name = file.getName();
-        
-        String timeStr = "201" + name.substring(1, 13);
-        try {
-            Date date = dateFormat.parse(timeStr);
-            info.setCreateDate(date);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
+    public void extractFileInfo(File file, FileInfo info) {
+        FileProcessor.getBasicFileInfo(file, info);
+        if(info.getDevice() == null) {
+            info.setDevice(NAME);
+        }
+        if(info.getFileType() == FileInfo.UNKNOWN) {
+            info.setFileType(FileInfo.PHOTO);
         }
         
-        info.setSize(FileUtils.sizeOf(file));
-        info.setExtension(FilenameUtils.getExtension(name).toLowerCase());
-        info.setDupIndex(FileProcessor.getDupIndex(name));
-        return info;
+        if(info.getCreateDate() == null) {
+            try {
+                String name = file.getName();
+                String timeStr = "201" + name.substring(1, 13);
+                Date date = dateFormat.parse(timeStr);
+                info.setCreateDate(date);
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     /**

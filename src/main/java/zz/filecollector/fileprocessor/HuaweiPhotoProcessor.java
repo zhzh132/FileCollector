@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import zz.filecollector.FileInfo;
 
 /**
@@ -24,26 +22,26 @@ public class HuaweiPhotoProcessor implements FileProcessor {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
     
     @Override
-    public FileInfo extractFileInfo(File file) {
-        FileInfo info = new FileInfo();
-        info.setDevice(NAME);
-        info.setFileType(FileInfo.PHOTO);
-        String name = file.getName();
-        
-        try {
-            Date date = dateFormat.parse(name.substring(4, 19));
-            info.setCreateDate(date);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
+    public void extractFileInfo(File file, FileInfo info) {
+        FileProcessor.getBasicFileInfo(file, info);
+        if(info.getDevice() == null) {
+            info.setDevice(NAME);
+        }
+        if(info.getFileType() == FileInfo.UNKNOWN) {
+            info.setFileType(FileInfo.PHOTO);
         }
         
-        info.setSize(FileUtils.sizeOf(file));
-        String extension = FilenameUtils.getExtension(name).toLowerCase();
-        info.setExtension(extension);
-        info.setDupIndex(FileProcessor.getDupIndex(name));
-        return info;
+        if(info.getCreateDate() == null) {
+            try {
+                String name = file.getName();
+                Date date = dateFormat.parse(name.substring(4, 19));
+                info.setCreateDate(date);
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
-
+    
     /**
      *  IMG_20150216_215521.jpg
      */
@@ -52,5 +50,4 @@ public class HuaweiPhotoProcessor implements FileProcessor {
         String name = file.getName();
         return name.matches("(?m)IMG_\\d{8}_\\d{6}\\.jpg");
     }
-    
 }
