@@ -14,13 +14,13 @@ import zz.filecollector.FileInfo;
  */
 public class FileProcessorRegister {
     public static final FileProcessor[] processors = {
+        new JpgPhotoProcessor(),
         new MeizuPhotoProcessor(),
-        new NormalizedFileProcessor(),
         new MeizuVideoProcessor(),
         new HuaweiPhotoProcessor(),
         new SamsungPhotoProcessor(),
         new SamsungVideoProcessor(),
-        new JpgPhotoProcessor()
+        new NormalizedFileProcessor()
     };
     
     public static FileInfo extractFileInfo(File file) {
