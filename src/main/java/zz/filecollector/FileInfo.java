@@ -117,4 +117,10 @@ public class FileInfo {
         return this.getSize() == info.getSize() &&
                 this.getCreateDate().equals(info.getCreateDate());
     }
+    
+    public boolean isValid() {
+        return this.fileType != UNKNOWN && 
+                this.createDate != null &&
+                this.calendar != null;
+    }
 }

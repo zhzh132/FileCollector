@@ -60,7 +60,7 @@ public class FileWorkerThread extends Thread {
     
     private void processFile(File file) {
         FileInfo fileInfo = FileProcessorRegister.extractFileInfo(file);
-        if(fileInfo.getFileType() != FileInfo.UNKNOWN) {
+        if(fileInfo.isValid()) {
             this.filesTotal++;
             this.info(file.getAbsolutePath());
             
