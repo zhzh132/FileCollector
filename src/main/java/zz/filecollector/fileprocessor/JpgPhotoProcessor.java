@@ -55,10 +55,12 @@ public class JpgPhotoProcessor implements FileProcessor {
                 
                 if(info.getDevice() == null) {
                     TiffField model = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MODEL);
-                    byte[] bytes = model.getByteArrayValue();
-                    String modelStr = new String(bytes).trim();
-                    if(StringUtils.isNotEmpty(modelStr)) {
-                        info.setDevice(modelStr);
+                    if(model != null) {
+                        byte[] bytes = model.getByteArrayValue();
+                        String modelStr = new String(bytes).trim();
+                        if(StringUtils.isNotEmpty(modelStr)) {
+                            info.setDevice(modelStr);
+                        }
                     }
                 }
             }
