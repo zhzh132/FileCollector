@@ -97,7 +97,7 @@ public class FileInfo {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
     
     /**
      *  yyyyMMdd-HHmmss (1).jpg
@@ -105,7 +105,7 @@ public class FileInfo {
      */
     public String getNormalizedName() {
         StringBuilder name = new StringBuilder();
-        name.append(dateFormat.format(createDate));
+        name.append(DATE_FORMAT.format(createDate));
         if(this.getDupIndex() > 0) {
             name.append(" (").append(this.getDupIndex()).append(")");
         }

@@ -9,7 +9,6 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import zz.filecollector.FileInfo;
 
 /**
@@ -19,7 +18,7 @@ import zz.filecollector.FileInfo;
 public class NormalizedFileProcessor implements FileProcessor {
 
     public static final String NAME = "Archived";
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA);
+    private static final SimpleDateFormat dateFormat = FileInfo.DATE_FORMAT;
     
     @Override
     public void extractFileInfo(File file, FileInfo info) {

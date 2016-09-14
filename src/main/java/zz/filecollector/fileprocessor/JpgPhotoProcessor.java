@@ -43,10 +43,12 @@ public class JpgPhotoProcessor implements FileProcessor {
                 if(info.getCreateDate() == null) {
                     try {
                         TiffField dateTime = jpegMetadata.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_DATE_TIME);
-                        String str = dateTime.getStringValue();  // 2014:02:06 12:11:26
-                        if(StringUtils.isNotEmpty(str)) {
-                            Date date = dateFormat.parse(str);
-                            info.setCreateDate(date);
+                        if(dateTime != null) {
+                            String str = dateTime.getStringValue();  // 2014:02:06 12:11:26
+                            if(StringUtils.isNotEmpty(str)) {
+                                Date date = dateFormat.parse(str);
+                                info.setCreateDate(date);
+                            }
                         }
                     } catch(Exception e) {
                         e.printStackTrace();
