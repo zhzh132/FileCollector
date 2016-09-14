@@ -17,7 +17,7 @@ import zz.filecollector.FileInfo;
  */
 public interface FileProcessor {
     void extractFileInfo(File file, FileInfo info);
-    boolean applies(File file);
+    boolean accept(File file);
     
     static int getDupIndex(String name) {
         int fr = name.lastIndexOf("(") + 1;

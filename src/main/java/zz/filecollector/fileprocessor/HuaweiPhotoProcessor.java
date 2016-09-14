@@ -46,7 +46,7 @@ public class HuaweiPhotoProcessor implements FileProcessor {
      *  IMG_20150216_215521.jpg
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)IMG_\\d{8}_\\d{6}\\.jpg");
     }

@@ -46,7 +46,7 @@ public class SamsungPhotoProcessor implements FileProcessor {
      *  2014-02-06 12.11.26.jpg
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)\\d{4}(-\\d{2}){2}\\s(\\d{2}\\.){3}jpg");
     }

@@ -46,7 +46,7 @@ public class SamsungVideoProcessor implements FileProcessor {
      *  video-2014-05-25-14-35-59.mp4
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)video-\\d{4}(-\\d{2}){5}\\.mp4");
     }

@@ -26,7 +26,7 @@ public class FileProcessorRegister {
     public static FileInfo extractFileInfo(File file) {
         FileInfo info = new FileInfo();
         for(FileProcessor fp : processors) {
-            if(fp.applies(file)) {
+            if(fp.accept(file)) {
                 fp.extractFileInfo(file, info);
             }
         }

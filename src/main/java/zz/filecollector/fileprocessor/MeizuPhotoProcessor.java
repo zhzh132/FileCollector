@@ -49,7 +49,7 @@ public class MeizuPhotoProcessor implements FileProcessor {
      *  P50828-174826_1.jpg
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)P\\d{5}-\\d{6}(\\D.*)?\\.(jpg|JPG)");
     }

@@ -56,7 +56,7 @@ public class NormalizedFileProcessor implements FileProcessor {
      *   20151108-105510.mp4
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)\\d{8}-\\d{6}(\\s\\(\\d+\\))?\\.\\w+");
     }

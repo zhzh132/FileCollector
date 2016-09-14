@@ -50,7 +50,7 @@ public class MeizuVideoProcessor implements FileProcessor {
      *  V51222-205940 (1).jpg
      */
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         return name.matches("(?m)V\\d{5}-\\d{6}(\\s\\(\\d+\\))?\\.(mp4|MP4)");
     }

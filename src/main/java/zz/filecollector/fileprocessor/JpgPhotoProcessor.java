@@ -70,7 +70,7 @@ public class JpgPhotoProcessor implements FileProcessor {
     }
     
     @Override
-    public boolean applies(File file) {
+    public boolean accept(File file) {
         String ext = FilenameUtils.getExtension(file.getName()).toLowerCase();
         return "jpg".equals(ext) || "jpeg".equals(ext);
     }
