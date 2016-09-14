@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Collection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import zz.filecollector.fileprocessor.FileProcessorRegister;
 
 /**
@@ -21,17 +22,16 @@ public class FileWorkerThread extends Thread {
     public static final int ACTION_COPY = 2;
     public static final int ACTION_MOVEDEL = 3;
     
-    private static final String[] exts = {"jpg", "jpeg", "JPG", "JPEG", "mp4", "MP4"};
-    
     private File srcDir;
     private File destDir;
     private final FileCollector photoCollector;
-    private boolean keepDoing = true;
+    private int actionType;
+    private volatile boolean keepDoing = true;
+    
     private int filesCopied;
     private int filesMoved;
     private int filesDeleted;
     private int filesTotal;
-    private int actionType;
     
     public FileWorkerThread(FileCollector photoCollector) {
         this.srcDir = photoCollector.getSrcDir();
@@ -43,7 +43,7 @@ public class FileWorkerThread extends Thread {
     public void run() {
         this.infoln("从" + srcDir.getAbsolutePath() + " 归档到 " + destDir.getAbsolutePath());
         this.photoCollector.disableButtons();
-        Collection<File> srcFiles = FileUtils.listFiles(srcDir, exts, true);
+        Collection<File> srcFiles = FileUtils.listFiles(srcDir, ExtensionRegister.getInstance().getFileFilter(), TrueFileFilter.TRUE);
         for(File file : srcFiles) {
             if(keepDoing) {
                 processFile(file);

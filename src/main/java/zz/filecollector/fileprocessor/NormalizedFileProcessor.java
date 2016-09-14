@@ -9,6 +9,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import zz.filecollector.ExtensionRegister;
 import zz.filecollector.FileInfo;
 
 /**
@@ -20,6 +21,8 @@ public class NormalizedFileProcessor implements FileProcessor {
     public static final String NAME = "Archived";
     private static final SimpleDateFormat dateFormat = FileInfo.DATE_FORMAT;
     
+    private final ExtensionRegister extReg = ExtensionRegister.getInstance();
+    
     @Override
     public void extractFileInfo(File file, FileInfo info) {
         FileProcessor.getBasicFileInfo(file, info);
@@ -28,15 +31,11 @@ public class NormalizedFileProcessor implements FileProcessor {
         }
         if(info.getFileType() == FileInfo.UNKNOWN) {
             String extension = info.getExtension();
-            switch(extension) {
-                case "jpg":
-                case "jpeg":
-                    info.setFileType(FileInfo.PHOTO);
-                    break;
-                case "mp4":
-                case "avi":
-                    info.setFileType(FileInfo.VIDEO);
-                    break;
+            if(extReg.isPhoto(extension)) {
+                info.setFileType(FileInfo.PHOTO);
+            }
+            else if(extReg.isVideo(extension)) {
+                info.setFileType(FileInfo.VIDEO);
             }
         }
         
