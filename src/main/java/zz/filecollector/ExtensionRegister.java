@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ExtensionRegister {
     private static final String[] EXT_PHOTO = {"jpg", "jpeg"};
-    private static final String[] EXT_VIDEO = {"mp4", "avi"};
+    private static final String[] EXT_VIDEO = {"mp4", "avi", "mov"};
     
     private static final ExtensionRegister instance = new ExtensionRegister();
     

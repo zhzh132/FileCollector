@@ -18,8 +18,10 @@ public class FileProcessorRegister {
         new MeizuPhotoProcessor(),
         new MeizuVideoProcessor(),
         new HuaweiPhotoProcessor(),
+        new HuaweiVideoProcessor(),
         new SamsungPhotoProcessor(),
         new SamsungVideoProcessor(),
+        new CameraVideoProcessor(),
         new NormalizedFileProcessor()
     };
     
