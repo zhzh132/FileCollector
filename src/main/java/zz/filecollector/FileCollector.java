@@ -307,6 +307,7 @@ public class FileCollector extends javax.swing.JFrame {
                         config.saveProperties();
                     }
                 });
+                frame.setTitle("Photo & Video Collector");
                 frame.setVisible(true);
             }
         });
