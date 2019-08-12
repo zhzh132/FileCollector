@@ -22,6 +22,8 @@ public class FileProcessorRegister {
         new SamsungPhotoProcessor(),
         new SamsungVideoProcessor(),
         new CameraVideoProcessor(),
+        new FaceUPhotoProcessor(),
+        new FaceUVideoProcessor(),
         new NormalizedFileProcessor()
     };
     
